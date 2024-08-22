@@ -8,7 +8,6 @@
         public int UserId { get; set; }
         public UserModel? User { get; set; }
 
-        public int EmailId { get; set; }
-        public EmailModel? Email { get; set; }
+        public List<EmailLabel>? EmailLabels { get; set; }
     }
 }
