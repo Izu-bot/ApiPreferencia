@@ -3,6 +3,7 @@ using ApiPreferencia.Data.Context;
 using ApiPreferencia.Data.Repository;
 using ApiPreferencia.Model;
 using ApiPreferencia.Services;
+using ApiPreferencia.VIewModel.PreferenceVM;
 using ApiPreferencia.VIewModel.UserVM;
 using Asp.Versioning;
 using AutoMapper;
@@ -27,6 +28,9 @@ builder.Services.AddDbContext<DatabaseContext>(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IPreferenceRepository, PreferenceRepository>();
+builder.Services.AddScoped<IPreferenceService, PreferenceService>();
+
 #endregion
 
 
@@ -45,6 +49,11 @@ var mapperConfig = new AutoMapper.MapperConfiguration(a =>
     a.CreateMap<AddUserViewModel, UserModel>();
     a.CreateMap<UserModel, GetUserViewModel>();
     a.CreateMap<GetUserViewModel, UserModel>();
+
+    a.CreateMap<PreferenceModel, AddPreferenceViewModel>();
+    a.CreateMap<AddPreferenceViewModel, PreferenceModel>();
+    a.CreateMap<PreferenceModel, GetPreferenceViewModel>();
+    a.CreateMap<GetPreferenceViewModel, PreferenceModel>();
 
 });
 
