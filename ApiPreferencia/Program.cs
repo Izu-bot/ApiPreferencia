@@ -3,6 +3,7 @@ using ApiPreferencia.Data.Context;
 using ApiPreferencia.Data.Repository;
 using ApiPreferencia.Model;
 using ApiPreferencia.Services;
+using ApiPreferencia.VIewModel.LabelVM;
 using ApiPreferencia.VIewModel.PreferenceVM;
 using ApiPreferencia.VIewModel.UserVM;
 using Asp.Versioning;
@@ -10,8 +11,22 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Serialização Json
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+        opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+
+#endregion
 
 #region Connection database
 
@@ -31,6 +46,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPreferenceRepository, PreferenceRepository>();
 builder.Services.AddScoped<IPreferenceService, PreferenceService>();
 
+builder.Services.AddScoped<ILabelRepository, LabelRepository>();
+builder.Services.AddScoped<ILabelService, LabelService>();
 #endregion
 
 
@@ -54,6 +71,11 @@ var mapperConfig = new AutoMapper.MapperConfiguration(a =>
     a.CreateMap<AddPreferenceViewModel, PreferenceModel>();
     a.CreateMap<PreferenceModel, GetPreferenceViewModel>();
     a.CreateMap<GetPreferenceViewModel, PreferenceModel>();
+
+    a.CreateMap<LabelModel, GetLabelViewModel>();
+    a.CreateMap<GetLabelViewModel, LabelModel>();
+    a.CreateMap<LabelModel, AddLabelViewModel>();
+    a.CreateMap<AddLabelViewModel, LabelModel>();
 
 });
 
