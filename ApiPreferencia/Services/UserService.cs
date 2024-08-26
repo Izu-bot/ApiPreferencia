@@ -13,6 +13,10 @@ namespace ApiPreferencia.Services
         {
             if (user == null) throw new ArgumentNullException("O usuário está nulo");
 
+            var userExist = _repository.GetUsername(user.UserEmail);
+            if (userExist != null) throw new InvalidOperationException($"O email {user.UserEmail} já está em uso!");
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
             _repository.Add(user);
         }
 
@@ -31,5 +35,7 @@ namespace ApiPreferencia.Services
         public UserModel? GetIdUser(int id) => _repository.GetId(id);
 
         public void UpdateUser(UserModel user) => _repository.Update(user);
+
+        public UserModel? GetByUsername(string username) => _repository.GetUsername(username);
     }
 }

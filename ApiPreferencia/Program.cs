@@ -3,14 +3,19 @@ using ApiPreferencia.Data.Context;
 using ApiPreferencia.Data.Repository;
 using ApiPreferencia.Model;
 using ApiPreferencia.Services;
+using ApiPreferencia.VIewModel.AuthVM;
 using ApiPreferencia.VIewModel.LabelVM;
 using ApiPreferencia.VIewModel.PreferenceVM;
 using ApiPreferencia.VIewModel.UserVM;
 using Asp.Versioning;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -58,6 +63,8 @@ builder.Services.AddScoped<IPreferenceService, PreferenceService>();
 builder.Services.AddScoped<ILabelRepository, LabelRepository>();
 builder.Services.AddScoped<ILabelService, LabelService>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 #endregion
 
 #region Configurando o AutoMapper
@@ -86,6 +93,9 @@ var mapperConfig = new AutoMapper.MapperConfiguration(a =>
     a.CreateMap<LabelModel, AddLabelViewModel>();
     a.CreateMap<AddLabelViewModel, LabelModel>();
 
+    a.CreateMap<UserModel, LoginViewModel>();
+    a.CreateMap<LoginViewModel, UserModel>();
+
 });
 
 // Criando o maper com base nas config
@@ -93,6 +103,25 @@ IMapper mapper = mapperConfig.CreateMapper();
 
 // Registra o mapper como serviço
 builder.Services.AddSingleton(mapper);
+
+#endregion
+
+#region Autenticação
+
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("f+ujXAKHk00L5jlMXo2XhAWawsOoihNP1OiAM25lLSO57+X7uBMQgwPju6yzyePi")),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+}); 
 
 #endregion
 
@@ -134,7 +163,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 

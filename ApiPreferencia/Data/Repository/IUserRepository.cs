@@ -6,6 +6,7 @@ namespace ApiPreferencia.Data.Repository
     {
         IEnumerable<UserModel> GetAll(int page, int pageSize); // Implementando a paginação
         UserModel? GetId(int id);
+        UserModel? GetUsername(string username);
         void Add(UserModel user);
         void Update(UserModel user);
         void Delete(UserModel user);

@@ -32,6 +32,8 @@ namespace ApiPreferencia.Data.Repository
 
         public UserModel? GetId(int id) => _context.Users.Find(id);
 
+        public UserModel? GetUsername(string username) => _context.Users.FirstOrDefault(u => u.UserEmail == username);
+
         public void Update(UserModel user)
         {
             _context.Update(user);
