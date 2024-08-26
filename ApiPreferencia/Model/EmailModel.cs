@@ -8,6 +8,6 @@
         public string? Subject { get; set; }
         public string? Body { get; set; }
 
-        public List<EmailLabel>? EmailLabels { get; set; }
+        public int LabelId { get; set; }
     }
 }

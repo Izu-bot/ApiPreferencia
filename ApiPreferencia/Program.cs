@@ -28,6 +28,15 @@ builder.Services.AddControllers()
 
 #endregion
 
+#region Configuração para porta de acesso
+
+//builder.WebHost.UseKestrel(opt =>
+//{
+//    opt.ListenAnyIP(32769); // porta 32769
+//});
+
+#endregion
+
 #region Connection database
 
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
@@ -48,8 +57,8 @@ builder.Services.AddScoped<IPreferenceService, PreferenceService>();
 
 builder.Services.AddScoped<ILabelRepository, LabelRepository>();
 builder.Services.AddScoped<ILabelService, LabelService>();
-#endregion
 
+#endregion
 
 #region Configurando o AutoMapper
 

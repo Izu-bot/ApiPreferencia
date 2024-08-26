@@ -8,6 +8,5 @@
         public int UserId { get; set; }
         public UserModel? User { get; set; }
 
-        public List<EmailLabel>? EmailLabels { get; set; }
     }
 }

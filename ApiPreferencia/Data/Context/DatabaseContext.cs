@@ -9,7 +9,6 @@ namespace ApiPreferencia.Data.Context
         public virtual DbSet<UserModel> Users { get; set; }
         public virtual DbSet<LabelModel> Labels { get; set; }
         public virtual DbSet<PreferenceModel> Preferences { get; set; }
-        public virtual DbSet<EmailLabel> EmailLabels { get; set; }
 
         public DatabaseContext(DbContextOptions options) : base(options) { }
 
@@ -48,21 +47,6 @@ namespace ApiPreferencia.Data.Context
                 .HasOne(e => e.User)
                 .WithOne()
                 .HasForeignKey<PreferenceModel>(e => e.UserId);
-
-            modelBuilder.Entity<EmailLabel>(entity =>
-            {
-                entity.HasKey(el => new { el.EmailId, el.LabelId });
-            });
-
-            modelBuilder.Entity<EmailLabel>()
-                .HasOne(el => el.Email)
-                .WithMany(e => e.EmailLabels)
-                .HasForeignKey(el => el.EmailId);
-            
-            modelBuilder.Entity<EmailLabel>()
-                .HasOne(el => el.Label)
-                .WithMany(l => l.EmailLabels)
-                .HasForeignKey(el => el.LabelId);
 
             base.OnModelCreating(modelBuilder);
         }

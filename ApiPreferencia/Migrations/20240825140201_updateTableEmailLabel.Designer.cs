@@ -2,6 +2,7 @@
 using ApiPreferencia.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oracle.EntityFrameworkCore.Metadata;
 
@@ -10,9 +11,11 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace ApiPreferencia.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240825140201_updateTableEmailLabel")]
+    partial class updateTableEmailLabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,46 @@ namespace ApiPreferencia.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ApiPreferencia.Model.EmailLabel", b =>
+                {
+                    b.Property<int>("EmailId")
+                        .HasColumnType("NUMBER(10)");
+
+                    b.Property<int>("LabelId")
+                        .HasColumnType("NUMBER(10)");
+
+                    b.HasKey("EmailId", "LabelId");
+
+                    b.HasIndex("LabelId");
+
+                    b.ToTable("EmailLabels");
+                });
+
+            modelBuilder.Entity("ApiPreferencia.Model.EmailModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)");
+
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailModel");
+                });
 
             modelBuilder.Entity("ApiPreferencia.Model.LabelModel", b =>
                 {
@@ -89,6 +132,25 @@ namespace ApiPreferencia.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("ApiPreferencia.Model.EmailLabel", b =>
+                {
+                    b.HasOne("ApiPreferencia.Model.EmailModel", "Email")
+                        .WithMany("EmailLabels")
+                        .HasForeignKey("EmailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApiPreferencia.Model.LabelModel", "Label")
+                        .WithMany("EmailLabels")
+                        .HasForeignKey("LabelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Email");
+
+                    b.Navigation("Label");
+                });
+
             modelBuilder.Entity("ApiPreferencia.Model.LabelModel", b =>
                 {
                     b.HasOne("ApiPreferencia.Model.UserModel", "User")
@@ -109,6 +171,16 @@ namespace ApiPreferencia.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ApiPreferencia.Model.EmailModel", b =>
+                {
+                    b.Navigation("EmailLabels");
+                });
+
+            modelBuilder.Entity("ApiPreferencia.Model.LabelModel", b =>
+                {
+                    b.Navigation("EmailLabels");
                 });
 
             modelBuilder.Entity("ApiPreferencia.Model.UserModel", b =>
