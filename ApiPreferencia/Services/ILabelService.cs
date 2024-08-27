@@ -4,7 +4,7 @@ namespace ApiPreferencia.Services
 {
     public interface ILabelService
     {
-        IEnumerable<LabelModel> GetAll(int page = 0, int pageSize = 10);
+        IEnumerable<LabelModel> GetAll(string username, int page = 0, int pageSize = 10);
         IEnumerable<LabelModel>? GetName(string name);
         LabelModel? GetById(int id);
         void AddLabel(LabelModel label);

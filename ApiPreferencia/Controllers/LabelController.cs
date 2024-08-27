@@ -5,30 +5,39 @@ using ApiPreferencia.VIewModel.PreferenceVM;
 using ApiPreferencia.VIewModel.UserVM;
 using Asp.Versioning;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ApiPreferencia.Controllers
 {
     [ApiVersion(1)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class LabelController : ControllerBase
     {
         private readonly ILabelService _service;
+        private readonly IUserService _userService; // Serviço para filtrar os dados
         private readonly IMapper _mapper;
 
-        public LabelController(ILabelService service, IMapper mappe)
+        public LabelController(ILabelService service, IMapper mapper, IUserService user)
         {
             _service = service;
-            _mapper = mappe;
+            _mapper = mapper;
+            _userService = user;
         }
 
         [MapToApiVersion(1)]
         [HttpGet]
         public ActionResult<IEnumerable<GetPreferenceViewModel>> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var label = _service.GetAll(page, pageSize);
+            var user = _userService.GetUserFromToken(User); // Obtem o ID do usuário do token JWT
+
+
+            var label = _service.GetAll(user, page, pageSize);
             var labelViewModel = _mapper.Map<IEnumerable<GetLabelViewModel>>(label);
 
             var viewModel = new PaginacaoLabelViewModel
@@ -63,7 +72,6 @@ namespace ApiPreferencia.Controllers
 
             return Ok(viewModel);
         }
-
 
         [MapToApiVersion(1)]
         [HttpPost]

@@ -12,7 +12,7 @@ namespace ApiPreferencia.Controllers
     [ApiVersion(1)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
@@ -44,7 +44,7 @@ namespace ApiPreferencia.Controllers
 
         [MapToApiVersion(1)]
         [HttpGet("{id}")]
-        //[AllowAnonymous]
+        
         public ActionResult<UserModel> Get(int id)
         {
             var user = _service.GetIdUser(id);
@@ -56,7 +56,7 @@ namespace ApiPreferencia.Controllers
 
         [MapToApiVersion(1)]
         [HttpPost]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public ActionResult Post([FromBody] AddUserViewModel user)
         {
             var usuario = _mapper.Map<UserModel>(user);

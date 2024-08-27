@@ -21,9 +21,10 @@ namespace ApiPreferencia.Data.Repository
             _context.SaveChanges();
         }
 
-        public IEnumerable<LabelModel> GetAll(int page, int pageSize)
+        public IEnumerable<LabelModel> GetAll(string username, int page, int pageSize)
         {
             return _context.Labels
+                .Where(u => u.User.UserEmail == username) // Faz a pesquisa pelo email cadastrado (username)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();

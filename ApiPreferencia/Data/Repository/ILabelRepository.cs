@@ -4,7 +4,7 @@ namespace ApiPreferencia.Data.Repository
 {
     public interface ILabelRepository
     {
-        IEnumerable<LabelModel> GetAll(int page, int pageSize);
+        IEnumerable<LabelModel> GetAll(string username, int page, int pageSize);
         IEnumerable<LabelModel>? GetName(string name);
         LabelModel? GetId(int id);
         void Add(LabelModel label);

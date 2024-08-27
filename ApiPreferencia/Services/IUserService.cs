@@ -1,4 +1,5 @@
 ﻿using ApiPreferencia.Model;
+using System.Security.Claims;
 
 namespace ApiPreferencia.Services
 {
@@ -10,5 +11,6 @@ namespace ApiPreferencia.Services
         void AddUser(UserModel user);
         void UpdateUser(UserModel user);
         void DeleteUser(int id);
+        string GetUserFromToken(ClaimsPrincipal user);
     }
 }

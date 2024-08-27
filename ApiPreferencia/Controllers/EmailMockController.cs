@@ -2,6 +2,7 @@
 using ApiPreferencia.Model;
 using ApiPreferencia.Model.MockData;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +11,14 @@ namespace ApiPreferencia.Controllers
     [ApiVersion(1)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmailMockController : ControllerBase
     {
         private readonly DatabaseContext _context;
 
         public EmailMockController(DatabaseContext context) => _context = context;
 
+        [MapToApiVersion(1)]
         [HttpGet]
         public ActionResult<IEnumerable<EmailModel>> GetEmail()
         {
@@ -23,6 +26,7 @@ namespace ApiPreferencia.Controllers
             return Ok(emails);
         }
 
+        [MapToApiVersion(1)]
         [HttpGet("{id}")]
         public ActionResult<EmailModel> Get(int id)
         {
@@ -32,6 +36,7 @@ namespace ApiPreferencia.Controllers
             return Ok(email);
         }
 
+        [MapToApiVersion(1)]
         [HttpPut("{emailId}/label/{labelId}")]
         public ActionResult Put(int emailId, int labelId)
         {
@@ -47,6 +52,7 @@ namespace ApiPreferencia.Controllers
             return NoContent();
         }
 
+        [MapToApiVersion(1)]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

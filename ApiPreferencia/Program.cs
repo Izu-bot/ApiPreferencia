@@ -65,6 +65,8 @@ builder.Services.AddScoped<ILabelService, LabelService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddHttpContextAccessor();
+
 #endregion
 
 #region Configurando o AutoMapper

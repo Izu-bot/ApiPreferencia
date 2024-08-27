@@ -24,7 +24,7 @@ namespace ApiPreferencia.Services
             _repository.Delete(label);
         }
 
-        public IEnumerable<LabelModel> GetAll(int page = 0, int pageSize = 10) => _repository.GetAll(page, pageSize);
+        public IEnumerable<LabelModel> GetAll(string username, int page = 0, int pageSize = 10) => _repository.GetAll(username, page, pageSize);
 
         public LabelModel? GetById(int id) => _repository.GetId(id);
 

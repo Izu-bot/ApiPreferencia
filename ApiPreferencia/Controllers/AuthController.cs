@@ -3,7 +3,6 @@ using ApiPreferencia.Services;
 using ApiPreferencia.VIewModel.AuthVM;
 using Asp.Versioning;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -49,7 +48,7 @@ namespace ApiPreferencia.Controllers
 
             SecurityTokenDescriptor tokenDescriptor = new()
             {
-                Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, model.UserEmail),
                     new Claim(ClaimTypes.Hash, Guid.NewGuid().ToString())

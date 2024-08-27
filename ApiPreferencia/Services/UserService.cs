@@ -1,13 +1,18 @@
 ﻿using ApiPreferencia.Data.Repository;
 using ApiPreferencia.Model;
+using System.Security.Claims;
 
 namespace ApiPreferencia.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
-
-        public UserService(IUserRepository repository) => _repository = repository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserService(IUserRepository repository, IHttpContextAccessor accessor)
+        {
+            _repository = repository;
+            _httpContextAccessor = accessor;
+        }
 
         public void AddUser(UserModel user)
         {
@@ -37,5 +42,17 @@ namespace ApiPreferencia.Services
         public void UpdateUser(UserModel user) => _repository.Update(user);
 
         public UserModel? GetByUsername(string username) => _repository.GetUsername(username);
+
+        // Metodo para extrair o usuário do token
+        public string GetUserFromToken(ClaimsPrincipal user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            var userIdClaim = user.FindFirstValue(ClaimTypes.Name);
+
+            if (userIdClaim == null) throw new Exception($"Não foi possivel encontrar o ID do usuário: {userIdClaim}");
+
+            return userIdClaim;
+        }
     }
 }

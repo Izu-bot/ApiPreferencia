@@ -3,6 +3,7 @@ using ApiPreferencia.Services;
 using ApiPreferencia.VIewModel.PreferenceVM;
 using Asp.Versioning;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace ApiPreferencia.Controllers
     [ApiVersion(1)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class PreferenceController : ControllerBase
     {
         private readonly IPreferenceService _service;
