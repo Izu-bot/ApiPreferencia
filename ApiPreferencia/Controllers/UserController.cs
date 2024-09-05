@@ -12,7 +12,7 @@ namespace ApiPreferencia.Controllers
     [ApiVersion(1)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;

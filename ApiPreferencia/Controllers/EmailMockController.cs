@@ -11,7 +11,7 @@ namespace ApiPreferencia.Controllers
     [ApiVersion(1)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class EmailMockController : ControllerBase
     {
         private readonly DatabaseContext _context;
