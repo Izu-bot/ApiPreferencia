@@ -61,17 +61,17 @@ namespace ApiPreferencia.Controllers
             return Ok(viewModel);
         }
 
-        [MapToApiVersion(1)]
-        [HttpGet("{name:alpha}")]
-        public ActionResult<LabelModel> Get(string name)
-        {
-            var label = _service.GetName(name);
-            if(label == null) return NotFound();
+        //[MapToApiVersion(1)]
+        //[HttpGet("{name:alpha}")]
+        //public ActionResult<LabelModel> Get(string name)
+        //{
+        //    var label = _service.GetName(name);
+        //    if(label == null) return NotFound();
 
-            var viewModel = _mapper.Map<GetLabelViewModel>(label);
+        //    var viewModel = _mapper.Map<GetLabelViewModel>(label);
 
-            return Ok(viewModel);
-        }
+        //    return Ok(viewModel);
+        //}
 
         [MapToApiVersion(1)]
         [HttpPost]

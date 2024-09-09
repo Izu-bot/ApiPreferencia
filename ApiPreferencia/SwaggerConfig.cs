@@ -12,16 +12,13 @@ namespace ApiPreferencia
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var apiDescription = context.ApiDescription;
-
             operation.Deprecated |= apiDescription.IsDeprecated();
-
             foreach (var responseType in context.ApiDescription.SupportedResponseTypes)
             {
                 var responseKey = responseType.IsDefaultResponse
                                   ? "default"
                                   : responseType.StatusCode.ToString();
                 var response = operation.Responses[responseKey];
-
                 foreach (var contentType in response.Content.Keys)
                 {
                     if (!responseType.ApiResponseFormats.Any(x => x.MediaType == contentType))
@@ -30,39 +27,31 @@ namespace ApiPreferencia
                     }
                 }
             }
-
             if (operation.Parameters == null)
             {
                 return;
             }
-
             foreach (var parameter in operation.Parameters)
             {
                 var description = apiDescription.ParameterDescriptions
                                                 .First(p => p.Name == parameter.Name);
-
                 parameter.Description ??= description.ModelMetadata?.Description;
-
-                if (parameter.Schema.Default == null && description.DefaultValue != null)
+                if (parameter.Schema.Default == null & description.DefaultValue != null)
                 {
                     var json = JsonSerializer.Serialize(
                         description.DefaultValue,
                         description.ModelMetadata.ModelType);
                     parameter.Schema.Default = OpenApiAnyFactory.CreateFromJson(json);
                 }
-
                 parameter.Required |= description.IsRequired;
             }
         }
     }
 
-
     public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
         private readonly IApiVersionDescriptionProvider provider;
-
         public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) => this.provider = provider;
-
         public void Configure(SwaggerGenOptions options)
         {
             foreach (var description in provider.ApiVersionDescriptions)

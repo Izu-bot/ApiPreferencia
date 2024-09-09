@@ -123,7 +123,7 @@ builder.Services.AddAuthentication(opt =>
         ValidateIssuer = false,
         ValidateAudience = false
     };
-}); 
+});
 
 #endregion
 
@@ -160,7 +160,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        foreach (var description in app.DescribeApiVersions())
+        {
+            options.SwaggerEndpoint(
+                $"/swagger/{description.GroupName}/swagger.json",
+                description.GroupName);
+        }
+    });
 }
 
 app.UseHttpsRedirection();

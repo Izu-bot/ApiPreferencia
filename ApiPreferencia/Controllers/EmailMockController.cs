@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiPreferencia.Controllers
 {
-    [ApiVersion(1)]
+    [ApiVersion(1, Deprecated = true)]
+    [ApiVersion(2)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     [AllowAnonymous]
@@ -19,6 +20,7 @@ namespace ApiPreferencia.Controllers
         public EmailMockController(DatabaseContext context) => _context = context;
 
         [MapToApiVersion(1)]
+        [MapToApiVersion(2)]
         [HttpGet]
         public ActionResult<IEnumerable<EmailModel>> GetEmail()
         {
@@ -27,6 +29,7 @@ namespace ApiPreferencia.Controllers
         }
 
         [MapToApiVersion(1)]
+        [MapToApiVersion(2)]
         [HttpGet("{id}")]
         public ActionResult<EmailModel> Get(int id)
         {
@@ -36,7 +39,17 @@ namespace ApiPreferencia.Controllers
             return Ok(email);
         }
 
+        [MapToApiVersion(2)]
+        [HttpGet("spam/email")]
+        public IActionResult GetSpamEmail()
+        {
+            // Retorna apenas email listados como spam
+            var spamEmails = EmailMock.GetSpamEmails();
+            return Ok(spamEmails);
+        }
+
         [MapToApiVersion(1)]
+        [MapToApiVersion(2)]
         [HttpPut("{emailId}/label/{labelId}")]
         public ActionResult Put(int emailId, int labelId)
         {
@@ -53,6 +66,7 @@ namespace ApiPreferencia.Controllers
         }
 
         [MapToApiVersion(1)]
+        [MapToApiVersion(2)]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -62,5 +76,6 @@ namespace ApiPreferencia.Controllers
             EmailMock.GetMockEmail().Remove(email);
             return NoContent();
         }
+
     }
 }
